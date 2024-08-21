@@ -44,4 +44,22 @@ public class ApplicationController {
                         .message(Constants.ALL_RECORDS.getConstant())
                 .build());
     }
+
+    @PostMapping("/getByEmail")
+    public ResponseEntity<Response<StudentDto>> getStudentByEmail(@RequestBody StudentDto dto){
+        return ResponseEntity.status(HttpStatus.OK).body(Response.<StudentDto>builder()
+                        .data(applicationService.getStudentByEmail(dto))
+                        .isError(false)
+                        .message(Constants.STUDENT_FETCH_BY_EMAIL.getConstant())
+                .build());
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Response<String>> deleteStudentByEmail(@RequestBody StudentDto dto){
+        return ResponseEntity.status(HttpStatus.OK).body(Response.<String>builder()
+                        .data(applicationService.deleteStudentByEmail(dto))
+                        .isError(false)
+                        .message(Constants.STUDENT_SUCCESSFULLY_DELETED.getConstant())
+                .build());
+    }
 }

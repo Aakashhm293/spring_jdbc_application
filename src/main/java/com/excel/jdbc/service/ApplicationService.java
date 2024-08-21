@@ -11,4 +11,8 @@ public interface ApplicationService {
     String updateStudent(StudentDto dto);
 
     List<StudentDto> getAllStudents();
+
+    StudentDto getStudentByEmail(StudentDto dto);
+
+    String deleteStudentByEmail(StudentDto dto);
 }

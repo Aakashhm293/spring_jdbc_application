@@ -12,6 +12,8 @@ public enum Constants {
     REGISTRATION_FAILED ("Registration Failed"),
     SUCCESSFULLY_UPDATED("Successfully Updated"),
     ALL_RECORDS("All the records present in the database"),
+    STUDENT_FETCH_BY_EMAIL("Student details for the provided email"),
+    STUDENT_SUCCESSFULLY_DELETED("Student Details Successfully Deleted"),
 
     FAILED_TO_ESTABLISH_CONNECTION("Failed to Establish Connection");
 

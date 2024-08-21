@@ -10,4 +10,8 @@ public interface ApplicationRepository {
     String update(Student student);
 
     List<Student> getAllStudentDetails();
+
+    Student getByStudentEmail(Student student);
+
+    String deleteStudentByEmail(String studentEmail);
 }
