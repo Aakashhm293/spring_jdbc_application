@@ -1,15 +1,13 @@
 package com.excel.jdbc.controller;
 
+import com.excel.jdbc.constants.Constants;
 import com.excel.jdbc.dto.StudentDto;
 import com.excel.jdbc.response.Response;
 import com.excel.jdbc.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/student")
@@ -23,7 +21,16 @@ public class ApplicationController {
         return ResponseEntity.status(HttpStatus.OK).body(Response.<String>builder()
                 .data(applicationService.registerStudent(dto))
                 .isError(false)
-                .message("Successfully Inserted")
+                .message(Constants.SUCCESSFULLY_INSERTED.getConstant())
+                .build());
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<Response<String>> updateStudent(@RequestBody StudentDto dto){
+        return ResponseEntity.status(HttpStatus.OK).body(Response.<String>builder()
+                        .data(applicationService.updateStudent(dto))
+                        .isError(false)
+                        .message(Constants.SUCCESSFULLY_UPDATED.getConstant())
                 .build());
     }
 }

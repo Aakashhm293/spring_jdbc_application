@@ -31,8 +31,24 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
             preparedStatement.execute();
 
         } catch (SQLException e){
-            Logger.getLogger("Failed to Establish Connection");
+            Logger.getLogger(Constants.FAILED_TO_ESTABLISH_CONNECTION.getConstant());
         }
         return Constants.SUCCESSFULLY_INSERTED.getConstant();
+    }
+
+    @Override
+    public String update(Student student) {
+        try{
+            connection = DriverManager.getConnection(DatabaseConnection.URL.getConnection(),DatabaseConnection.USER.getConnection(), DatabaseConnection.PWD.getConnection());
+            PreparedStatement preparedStatement = connection.prepareStatement(Queries.UPDATE_STUDENT.getQuery());
+            preparedStatement.setString(1,student.getStudentName());
+            preparedStatement.setString(2,student.getStudentPassword());
+            preparedStatement.setString(3,student.getStudentAddress());
+            preparedStatement.setString(4,student.getStudentEmail());
+            preparedStatement.execute();
+        } catch (SQLException e){
+            Logger.getLogger(Constants.FAILED_TO_ESTABLISH_CONNECTION.getConstant());
+        }
+        return Constants.SUCCESSFULLY_UPDATED.getConstant();
     }
 }

@@ -1,9 +1,9 @@
 package com.excel.jdbc.service.impl;
 
 import com.excel.jdbc.dto.StudentDto;
-import com.excel.jdbc.entity.Student;
 import com.excel.jdbc.repository.ApplicationRepository;
 import com.excel.jdbc.service.ApplicationService;
+import com.excel.jdbc.util.DtoToEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +15,11 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public String registerStudent(StudentDto dto) {
-        return applicationRepository.save(Student.builder()
-                .studentId(dto.getStudentId())
-                .studentName(dto.getStudentName())
-                .studentEmail(dto.getStudentEmail())
-                .studentPassword(dto.getStudentPassword())
-                .studentAddress(dto.getStudentAddress())
-                .build());
+        return applicationRepository.save(DtoToEntity.dtoTOEntity(dto));
+    }
+
+    @Override
+    public String updateStudent(StudentDto dto) {
+        return applicationRepository.update(DtoToEntity.dtoTOEntity(dto));
     }
 }
