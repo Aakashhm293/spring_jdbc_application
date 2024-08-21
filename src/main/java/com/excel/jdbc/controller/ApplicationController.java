@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/student")
 @RequiredArgsConstructor
@@ -31,6 +33,15 @@ public class ApplicationController {
                         .data(applicationService.updateStudent(dto))
                         .isError(false)
                         .message(Constants.SUCCESSFULLY_UPDATED.getConstant())
+                .build());
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<Response<List<StudentDto>>> getAllStudentDetails(){
+        return ResponseEntity.status(HttpStatus.OK).body(Response.<List<StudentDto>>builder()
+                        .data(applicationService.getAllStudents())
+                        .isError(false)
+                        .message(Constants.ALL_RECORDS.getConstant())
                 .build());
     }
 }

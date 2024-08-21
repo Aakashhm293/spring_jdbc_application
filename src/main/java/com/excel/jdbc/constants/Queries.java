@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 public enum Queries {
 
     REGISTER_STUDENT("insert into student (student_id,student_name, student_email, student_password, student_address) values (?,?,?,?,?)"),
-    UPDATE_STUDENT("update student set student_name = ? , student_password = ?, student_address = ? where student_email = ?");
+    UPDATE_STUDENT("update student set student_name = ? , student_password = ?, student_address = ? where student_email = ?"),
+    GET_ALL_STUDENT_DETAILS("select * from student");
+
     private final String query;
 }

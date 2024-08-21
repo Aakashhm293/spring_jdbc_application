@@ -7,10 +7,9 @@ import com.excel.jdbc.entity.Student;
 import com.excel.jdbc.repository.ApplicationRepository;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 @Repository
@@ -50,5 +49,30 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
             Logger.getLogger(Constants.FAILED_TO_ESTABLISH_CONNECTION.getConstant());
         }
         return Constants.SUCCESSFULLY_UPDATED.getConstant();
+    }
+
+    @Override
+    public List<Student> getAllStudentDetails() {
+        try{
+            connection = DriverManager.getConnection(DatabaseConnection.URL.getConnection(),DatabaseConnection.USER.getConnection(), DatabaseConnection.PWD.getConnection());
+            PreparedStatement preparedStatement = connection.prepareStatement(Queries.GET_ALL_STUDENT_DETAILS.getQuery());
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            List<Student> studentList = new ArrayList<>();
+
+            while(resultSet.next()){
+                studentList.add(Student.builder()
+                        .studentId(resultSet.getInt(1))
+                        .studentName(resultSet.getString(2))
+                        .studentEmail(resultSet.getString(3))
+                        .studentPassword(resultSet.getString(4))
+                        .studentAddress(resultSet.getString(5))
+                        .build());
+            }
+            return studentList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
