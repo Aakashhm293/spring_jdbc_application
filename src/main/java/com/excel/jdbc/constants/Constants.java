@@ -9,7 +9,7 @@ public enum Constants {
 
     SUCCESSFULLY_INSERTED ("Successfully Inserted"),
     SUCCESSFULLY_DELETED ("Successfully Deleted"),
-    REGISTRATION_FAILED ("Registration Failed"),
+    SQL_EXCEPTION("Sql Exception"),
     SUCCESSFULLY_UPDATED("Successfully Updated"),
     ALL_RECORDS("All the records present in the database"),
     STUDENT_FETCH_BY_EMAIL("Student details for the provided email"),

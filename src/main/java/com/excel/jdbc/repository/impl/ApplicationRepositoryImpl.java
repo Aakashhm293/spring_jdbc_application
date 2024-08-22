@@ -31,6 +31,12 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
 
         } catch (SQLException e) {
             Logger.getLogger(Constants.FAILED_TO_ESTABLISH_CONNECTION.getConstant());
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                Logger.getLogger(Constants.SQL_EXCEPTION.getConstant());
+            }
         }
         return Constants.SUCCESSFULLY_INSERTED.getConstant();
     }
@@ -47,19 +53,26 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
             preparedStatement.execute();
         } catch (SQLException e) {
             Logger.getLogger(Constants.FAILED_TO_ESTABLISH_CONNECTION.getConstant());
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                Logger.getLogger(Constants.SQL_EXCEPTION.getConstant());
+            }
         }
         return Constants.SUCCESSFULLY_UPDATED.getConstant();
     }
 
     @Override
     public List<Student> getAllStudentDetails() {
+        List<Student> studentList = null;
         try {
             connection = DriverManager.getConnection(DatabaseConnection.URL.getConnection(), DatabaseConnection.USER.getConnection(), DatabaseConnection.PWD.getConnection());
             PreparedStatement preparedStatement = connection.prepareStatement(Queries.GET_ALL_STUDENT_DETAILS.getQuery());
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            List<Student> studentList = new ArrayList<>();
+            studentList = new ArrayList<>();
 
             while (resultSet.next()) {
                 studentList.add(Student.builder()
@@ -70,15 +83,16 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
                         .studentAddress(resultSet.getString(5))
                         .build());
             }
-            return studentList;
+
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Logger.getLogger(Constants.SQL_EXCEPTION.getConstant());
         }
+        return studentList;
     }
 
     @Override
     public Student getByStudentEmail(Student student) {
-        Student studentObject;
+        Student studentObject = null;
         try {
             connection = DriverManager.getConnection(DatabaseConnection.URL.getConnection(), DatabaseConnection.USER.getConnection(), DatabaseConnection.PWD.getConnection());
             PreparedStatement preparedStatement = connection.prepareStatement(Queries.GET_STUDENT_BY_EMAIL.getQuery());
@@ -86,8 +100,6 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
             preparedStatement.setString(1, student.getStudentEmail());
 
             ResultSet resultSet = preparedStatement.executeQuery();
-
-            studentObject = null;
 
             while (resultSet.next()) {
                 studentObject = Student.builder()
@@ -99,7 +111,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
                         .build();
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Logger.getLogger(Constants.SQL_EXCEPTION.getConstant());
         }
         return studentObject;
     }
@@ -114,7 +126,13 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
 
             preparedStatement.execute();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Logger.getLogger("Sql Exception");
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                Logger.getLogger(Constants.SQL_EXCEPTION.getConstant());
+            }
         }
         return Constants.SUCCESSFULLY_DELETED.getConstant();
     }

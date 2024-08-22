@@ -5,6 +5,9 @@ import com.excel.jdbc.entity.Student;
 
 public class Conversion {
 
+    private Conversion(){
+    }
+
     public static Student dtoToEntity(StudentDto dto){
         return Student.builder()
                 .studentId(dto.getStudentId())

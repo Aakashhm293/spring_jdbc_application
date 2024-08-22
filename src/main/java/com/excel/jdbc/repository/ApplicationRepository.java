@@ -5,7 +5,8 @@ import com.excel.jdbc.entity.Student;
 import java.util.List;
 
 public interface ApplicationRepository {
-    String save(Student build);
+
+    String save(Student student);
 
     String update(Student student);
 
