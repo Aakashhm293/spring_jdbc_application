@@ -5,23 +5,30 @@ import com.excel.jdbc.constants.DatabaseConnection;
 import com.excel.jdbc.constants.Queries;
 import com.excel.jdbc.entity.Student;
 import com.excel.jdbc.repository.ApplicationRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 @Repository
+@RequiredArgsConstructor
 public class ApplicationRepositoryImpl implements ApplicationRepository {
 
-    Connection connection = null;
+    private Connection connection;
+
+    private PreparedStatement preparedStatement;
+
+    private Student studentObject;
+
+    private final List<Student> studentList;
 
     @Override
     public String save(Student student) {
         try {
             connection = DriverManager.getConnection(DatabaseConnection.URL.getConnection(), DatabaseConnection.USER.getConnection(), DatabaseConnection.PWD.getConnection());
-            PreparedStatement preparedStatement = connection.prepareStatement(Queries.REGISTER_STUDENT.getQuery());
+            preparedStatement = connection.prepareStatement(Queries.REGISTER_STUDENT.getQuery());
             preparedStatement.setInt(1, student.getStudentId());
             preparedStatement.setString(2, student.getStudentName());
             preparedStatement.setString(3, student.getStudentEmail());
@@ -45,7 +52,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
     public String update(Student student) {
         try {
             connection = DriverManager.getConnection(DatabaseConnection.URL.getConnection(), DatabaseConnection.USER.getConnection(), DatabaseConnection.PWD.getConnection());
-            PreparedStatement preparedStatement = connection.prepareStatement(Queries.UPDATE_STUDENT.getQuery());
+            preparedStatement = connection.prepareStatement(Queries.UPDATE_STUDENT.getQuery());
             preparedStatement.setString(1, student.getStudentName());
             preparedStatement.setString(2, student.getStudentPassword());
             preparedStatement.setString(3, student.getStudentAddress());
@@ -65,14 +72,12 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
 
     @Override
     public List<Student> getAllStudentDetails() {
-        List<Student> studentList = null;
+
         try {
             connection = DriverManager.getConnection(DatabaseConnection.URL.getConnection(), DatabaseConnection.USER.getConnection(), DatabaseConnection.PWD.getConnection());
-            PreparedStatement preparedStatement = connection.prepareStatement(Queries.GET_ALL_STUDENT_DETAILS.getQuery());
+            preparedStatement = connection.prepareStatement(Queries.GET_ALL_STUDENT_DETAILS.getQuery());
 
             ResultSet resultSet = preparedStatement.executeQuery();
-
-            studentList = new ArrayList<>();
 
             while (resultSet.next()) {
                 studentList.add(Student.builder()
@@ -92,10 +97,10 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
 
     @Override
     public Student getByStudentEmail(Student student) {
-        Student studentObject = null;
+
         try {
             connection = DriverManager.getConnection(DatabaseConnection.URL.getConnection(), DatabaseConnection.USER.getConnection(), DatabaseConnection.PWD.getConnection());
-            PreparedStatement preparedStatement = connection.prepareStatement(Queries.GET_STUDENT_BY_EMAIL.getQuery());
+            preparedStatement = connection.prepareStatement(Queries.GET_STUDENT_BY_EMAIL.getQuery());
 
             preparedStatement.setString(1, student.getStudentEmail());
 
@@ -120,16 +125,17 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
     public String deleteStudentByEmail(String studentEmail) {
         try{
             connection = DriverManager.getConnection(DatabaseConnection.URL.getConnection(), DatabaseConnection.USER.getConnection(), DatabaseConnection.PWD.getConnection());
-            PreparedStatement preparedStatement = connection.prepareStatement(Queries.DELETE_STUDENT_DETAILS.getQuery());
+            preparedStatement = connection.prepareStatement(Queries.DELETE_STUDENT_DETAILS.getQuery());
 
             preparedStatement.setString(1,studentEmail);
 
             preparedStatement.execute();
         } catch (SQLException e) {
-            Logger.getLogger("Sql Exception");
+            Logger.getLogger(Constants.SQL_EXCEPTION.getConstant());
         } finally {
             try {
                 connection.close();
+                preparedStatement.close();
             } catch (SQLException e) {
                 Logger.getLogger(Constants.SQL_EXCEPTION.getConstant());
             }
